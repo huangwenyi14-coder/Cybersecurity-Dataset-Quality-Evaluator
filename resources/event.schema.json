@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Security event minimum contract v1.0.0",
+  "type": "object",
+  "required": [
+    "event_id",
+    "event_time",
+    "subject_type",
+    "subject_id",
+    "operation",
+    "object_type",
+    "object_id",
+    "provenance"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_type": {
+      "enum": [
+        "account",
+        "command",
+        "device",
+        "domain",
+        "file",
+        "host",
+        "memory",
+        "module",
+        "network_endpoint",
+        "pipe",
+        "process",
+        "registry",
+        "service",
+        "session",
+        "thread"
+      ]
+    },
+    "subject_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operation": {
+      "enum": [
+        "access",
+        "change_owner",
+        "change_permissions",
+        "communicate",
+        "connect",
+        "create",
+        "create_remote",
+        "delete",
+        "execute",
+        "load",
+        "login",
+        "logout",
+        "map",
+        "modify",
+        "modify_attributes",
+        "open",
+        "protect",
+        "query",
+        "read",
+        "read_socket_parameters",
+        "receive",
+        "rename",
+        "send",
+        "share_memory",
+        "spawn",
+        "terminate",
+        "unmap",
+        "write",
+        "write_socket_parameters"
+      ]
+    },
+    "object_type": {
+      "enum": [
+        "account",
+        "command",
+        "device",
+        "domain",
+        "file",
+        "host",
+        "memory",
+        "module",
+        "network_endpoint",
+        "pipe",
+        "process",
+        "registry",
+        "service",
+        "session",
+        "thread"
+      ]
+    },
+    "object_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_time": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit",
+        "basis"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "enum": [
+            "s",
+            "ms",
+            "us",
+            "ns",
+            "iso8601"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "utc",
+            "relative",
+            "local_unspecified"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "file",
+        "source_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "offset"
+          ]
+        },
+        {
+          "required": [
+            "row"
+          ]
+        },
+        {
+          "required": [
+            "packet"
+          ]
+        }
+      ]
+    }
+  },
+  "$comment": "The runtime additionally rejects placeholder strings and checks timestamp interpretation; schema alone does not establish evidence provenance."
+}

@@ -1,0 +1,518 @@
+{
+  "rules": [
+    {
+      "id": "system_info",
+      "technique": "T1082",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "uname|hostname|systeminfo|sw_vers",
+      "arguments_regex": ".*"
+    },
+    {
+      "id": "user_identity",
+      "technique": "T1033",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "whoami|id",
+      "arguments_regex": ".*"
+    },
+    {
+      "id": "network_config",
+      "technique": "T1016",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "ifconfig|ipconfig|route|arp",
+      "arguments_regex": ".*"
+    },
+    {
+      "id": "ip_config",
+      "technique": "T1016",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "ip",
+      "arguments_regex": "\\b(addr|address|link|route)\\b"
+    },
+    {
+      "id": "process_list",
+      "technique": "T1057",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "ps|tasklist",
+      "arguments_regex": ".*"
+    },
+    {
+      "id": "network_connections",
+      "technique": "T1049",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "netstat|ss",
+      "arguments_regex": ".*"
+    },
+    {
+      "id": "file_listing",
+      "technique": "T1083",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "ls|find|locate|pwd|tree",
+      "arguments_regex": ".*"
+    },
+    {
+      "id": "account_enumeration",
+      "technique": "T1087.001",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "getent",
+      "arguments_regex": "\\bpasswd\\b"
+    },
+    {
+      "id": "group_enumeration",
+      "technique": "T1069.001",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "getent",
+      "arguments_regex": "\\bgroup\\b"
+    },
+    {
+      "id": "net_accounts",
+      "technique": "T1087.001",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "net|net1",
+      "arguments_regex": "^user\\s*$"
+    },
+    {
+      "id": "net_groups",
+      "technique": "T1069.001",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "net|net1",
+      "arguments_regex": "^(localgroup|group)\\s*$"
+    },
+    {
+      "id": "remote_host_probe",
+      "technique": "T1018",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "ping",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "port_scan_tool",
+      "technique": "T1046",
+      "tactic": "TA0007",
+      "input": "execution event",
+      "executable_fullmatch": "nmap|masscan|zmap",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "unix_shell",
+      "technique": "T1059.004",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "sh|bash|dash|zsh|ksh",
+      "arguments_regex": "(^|\\s)-c\\s+\\S"
+    },
+    {
+      "id": "powershell",
+      "technique": "T1059.001",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "powershell|pwsh",
+      "arguments_regex": "(^|\\s)-(c|command|file|enc|encodedcommand)\\s+\\S"
+    },
+    {
+      "id": "windows_shell",
+      "technique": "T1059.003",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "cmd",
+      "arguments_regex": "(^|\\s)/(c|k)\\s+\\S"
+    },
+    {
+      "id": "python_script",
+      "technique": "T1059.006",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "python|python2|python3",
+      "arguments_regex": "(^|\\s)-c\\s+\\S|\\S+\\.py(\\s|$)"
+    },
+    {
+      "id": "javascript",
+      "technique": "T1059.007",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "node|nodejs",
+      "arguments_regex": "(^|\\s)-e\\s+\\S|\\S+\\.js(\\s|$)"
+    },
+    {
+      "id": "vbs_script",
+      "technique": "T1059.005",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "wscript|cscript",
+      "arguments_regex": "\\.vbs(\\s|$)"
+    },
+    {
+      "id": "applescript",
+      "technique": "T1059.002",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "osascript",
+      "arguments_regex": "(^|\\s)-e\\s+\\S|\\.scpt(\\s|$)"
+    },
+    {
+      "id": "wmi_execution",
+      "technique": "T1047",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "wmic",
+      "arguments_regex": "\\bprocess\\s+call\\s+create\\b"
+    },
+    {
+      "id": "scheduled_task",
+      "technique": "T1053.005",
+      "tactic": "TA0003",
+      "input": "execution event",
+      "executable_fullmatch": "schtasks",
+      "arguments_regex": "(^|\\s)/create\\b"
+    },
+    {
+      "id": "cron_edit",
+      "technique": "T1053.003",
+      "tactic": "TA0003",
+      "input": "execution event",
+      "executable_fullmatch": "crontab",
+      "arguments_regex": "(^|\\s)-e(\\s|$)"
+    },
+    {
+      "id": "service_install",
+      "technique": "T1543.003",
+      "tactic": "TA0003",
+      "input": "execution event",
+      "executable_fullmatch": "sc",
+      "arguments_regex": "^create\\s+\\S"
+    },
+    {
+      "id": "systemd_enable",
+      "technique": "T1543.002",
+      "tactic": "TA0003",
+      "input": "execution event",
+      "executable_fullmatch": "systemctl",
+      "arguments_regex": "\\benable\\s+\\S"
+    },
+    {
+      "id": "linux_permissions",
+      "technique": "T1222.002",
+      "tactic": "TA0112",
+      "input": "execution event",
+      "executable_fullmatch": "chmod|chown",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "windows_permissions",
+      "technique": "T1222.001",
+      "tactic": "TA0112",
+      "input": "execution event",
+      "executable_fullmatch": "icacls|cacls",
+      "arguments_regex": "/(grant|deny|setowner|reset)\\b"
+    },
+    {
+      "id": "create_account",
+      "technique": "T1136.001",
+      "tactic": "TA0003",
+      "input": "execution event",
+      "executable_fullmatch": "useradd|adduser",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "net_create_account",
+      "technique": "T1136.001",
+      "tactic": "TA0003",
+      "input": "execution event",
+      "executable_fullmatch": "net|net1",
+      "arguments_regex": "^user\\b.*\\s/add\\b"
+    },
+    {
+      "id": "sudo_invocation",
+      "technique": "T1548.003",
+      "tactic": "TA0004",
+      "input": "execution event",
+      "executable_fullmatch": "sudo",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "wget_transfer",
+      "technique": "T1105",
+      "tactic": "TA0011",
+      "input": "execution event",
+      "executable_fullmatch": "wget",
+      "arguments_regex": "https?://\\S"
+    },
+    {
+      "id": "curl_transfer",
+      "technique": "T1105",
+      "tactic": "TA0011",
+      "input": "execution event",
+      "executable_fullmatch": "curl",
+      "arguments_regex": "https?://\\S"
+    },
+    {
+      "id": "ssh_remote",
+      "technique": "T1021.004",
+      "tactic": "TA0008",
+      "input": "execution event",
+      "executable_fullmatch": "ssh",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "rdp_remote",
+      "technique": "T1021.001",
+      "tactic": "TA0008",
+      "input": "execution event",
+      "executable_fullmatch": "mstsc|xfreerdp|rdesktop",
+      "arguments_regex": "\\S"
+    },
+    {
+      "id": "smb_remote",
+      "technique": "T1021.002",
+      "tactic": "TA0008",
+      "input": "execution event",
+      "executable_fullmatch": "smbclient",
+      "arguments_regex": "//\\S"
+    },
+    {
+      "id": "service_exec",
+      "technique": "T1569.002",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "psexec|psexec64",
+      "arguments_regex": "\\\\\\\\\\S"
+    },
+    {
+      "id": "archive_tar",
+      "technique": "T1560.001",
+      "tactic": "TA0009",
+      "input": "execution event",
+      "executable_fullmatch": "tar",
+      "arguments_regex": "(^|\\s)-?[a-z]*c[a-z]*(\\s|$)|--create"
+    },
+    {
+      "id": "archive_zip",
+      "technique": "T1560.001",
+      "tactic": "TA0009",
+      "input": "execution event",
+      "executable_fullmatch": "zip|rar|7z|7za",
+      "arguments_regex": "(^a\\s+)|\\.zip\\b"
+    },
+    {
+      "id": "decode_base64",
+      "technique": "T1140",
+      "tactic": "TA0005",
+      "input": "execution event",
+      "executable_fullmatch": "base64",
+      "arguments_regex": "(^|\\s)(-d|--decode)(\\s|$)"
+    },
+    {
+      "id": "certutil_decode",
+      "technique": "T1140",
+      "tactic": "TA0005",
+      "input": "execution event",
+      "executable_fullmatch": "certutil",
+      "arguments_regex": "(^|\\s)-decode\\s"
+    },
+    {
+      "id": "certutil_transfer",
+      "technique": "T1105",
+      "tactic": "TA0011",
+      "input": "execution event",
+      "executable_fullmatch": "certutil",
+      "arguments_regex": "(^|\\s)-urlcache\\b.*https?://"
+    },
+    {
+      "id": "clear_eventlog",
+      "technique": "T1685.005",
+      "tactic": "TA0112",
+      "input": "execution event",
+      "executable_fullmatch": "wevtutil",
+      "arguments_regex": "^cl\\s+\\S"
+    },
+    {
+      "id": "timestomp",
+      "technique": "T1070.006",
+      "tactic": "TA0005",
+      "input": "execution event",
+      "executable_fullmatch": "touch",
+      "arguments_regex": "(^|\\s)(-t|-d|-r)\\s+\\S"
+    },
+    {
+      "id": "stop_service",
+      "technique": "T1489",
+      "tactic": "TA0040",
+      "input": "execution event",
+      "executable_fullmatch": "systemctl",
+      "arguments_regex": "^stop\\s+\\S"
+    },
+    {
+      "id": "stop_win_service",
+      "technique": "T1489",
+      "tactic": "TA0040",
+      "input": "execution event",
+      "executable_fullmatch": "sc|net",
+      "arguments_regex": "^stop\\s+\\S"
+    },
+    {
+      "id": "remove_snapshots",
+      "technique": "T1490",
+      "tactic": "TA0040",
+      "input": "execution event",
+      "executable_fullmatch": "vssadmin",
+      "arguments_regex": "^delete\\s+shadows\\b"
+    },
+    {
+      "id": "container_deploy",
+      "technique": "T1610",
+      "tactic": "TA0002",
+      "input": "execution event",
+      "executable_fullmatch": "docker|podman",
+      "arguments_regex": "^run\\s+\\S"
+    },
+    {
+      "id": "startup_file",
+      "technique": "T1547.001",
+      "tactic": "TA0003",
+      "input": "typed target-path event",
+      "operations": [
+        "create",
+        "write"
+      ],
+      "path_regex": "/start menu/programs/startup/"
+    },
+    {
+      "id": "cron_file",
+      "technique": "T1053.003",
+      "tactic": "TA0003",
+      "input": "typed target-path event",
+      "operations": [
+        "create",
+        "write"
+      ],
+      "path_regex": "^/(etc/cron[^/]*|var/spool/cron)/"
+    },
+    {
+      "id": "systemd_file",
+      "technique": "T1543.002",
+      "tactic": "TA0003",
+      "input": "typed target-path event",
+      "operations": [
+        "create",
+        "write"
+      ],
+      "path_regex": "^/(etc|usr/lib|lib)/systemd/system/[^/]+\\.service$"
+    },
+    {
+      "id": "ssh_authorized_key",
+      "technique": "T1098.004",
+      "tactic": "TA0003",
+      "input": "typed target-path event",
+      "operations": [
+        "create",
+        "write"
+      ],
+      "path_regex": "/\\.ssh/authorized_keys$"
+    },
+    {
+      "id": "ld_preload",
+      "technique": "T1574.006",
+      "tactic": "TA0005",
+      "input": "typed target-path event",
+      "operations": [
+        "create",
+        "write"
+      ],
+      "path_regex": "^/etc/ld\\.so\\.preload$"
+    },
+    {
+      "id": "shadow_read",
+      "technique": "T1003.008",
+      "tactic": "TA0006",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "^/etc/(shadow|gshadow)$"
+    },
+    {
+      "id": "history_read",
+      "technique": "T1552.003",
+      "tactic": "TA0006",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "/\\.(bash_history|zsh_history)$"
+    },
+    {
+      "id": "private_key_read",
+      "technique": "T1552.004",
+      "tactic": "TA0006",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "/\\.ssh/id_(rsa|ed25519|dsa|ecdsa)$"
+    },
+    {
+      "id": "browser_secrets",
+      "technique": "T1555.003",
+      "tactic": "TA0006",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "/(login data|logins\\.json|key[34]\\.db)$"
+    },
+    {
+      "id": "passwd_discovery",
+      "technique": "T1087.001",
+      "tactic": "TA0007",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "^/etc/passwd$"
+    },
+    {
+      "id": "document_collection",
+      "technique": "T1005",
+      "tactic": "TA0009",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "/(documents|desktop|home)/.*\\.(docx?|xlsx?|pptx?|pdf|csv)$"
+    },
+    {
+      "id": "hosts_config",
+      "technique": "T1016",
+      "tactic": "TA0007",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "^/etc/(hosts|resolv\\.conf)$"
+    },
+    {
+      "id": "system_info_file",
+      "technique": "T1082",
+      "tactic": "TA0007",
+      "input": "typed target-path event",
+      "operations": [
+        "read"
+      ],
+      "path_regex": "^/(proc/(cpuinfo|version)|etc/os-release)$"
+    }
+  ],
+  "scope": "Observable attributed procedures; invocation rules include attempts. Not a universal proof of attack intent.",
+  "rule_count": 60,
+  "parent_techniques_with_rules": 34
+}

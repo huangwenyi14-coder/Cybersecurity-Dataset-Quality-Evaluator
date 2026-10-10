@@ -1,0 +1,270 @@
+{
+  "catalog": {
+    "M1031": {
+      "name": "Network Intrusion Prevention",
+      "type": "course-of-action",
+      "parent": "M1031",
+      "tactics": []
+    },
+    "M1016": {
+      "name": "Vulnerability Scanning",
+      "type": "course-of-action",
+      "parent": "M1016",
+      "tactics": []
+    },
+    "M1035": {
+      "name": "Limit Access to Resource Over Network",
+      "type": "course-of-action",
+      "parent": "M1035",
+      "tactics": []
+    },
+    "M1029": {
+      "name": "Remote Data Storage",
+      "type": "course-of-action",
+      "parent": "M1029",
+      "tactics": []
+    },
+    "M1037": {
+      "name": "Filter Network Traffic",
+      "type": "course-of-action",
+      "parent": "M1037",
+      "tactics": []
+    },
+    "M1021": {
+      "name": "Restrict Web-Based Content",
+      "type": "course-of-action",
+      "parent": "M1021",
+      "tactics": []
+    },
+    "M1033": {
+      "name": "Limit Software Installation",
+      "type": "course-of-action",
+      "parent": "M1033",
+      "tactics": []
+    },
+    "M1013": {
+      "name": "Application Developer Guidance",
+      "type": "course-of-action",
+      "parent": "M1013",
+      "tactics": []
+    },
+    "M1034": {
+      "name": "Limit Hardware Installation",
+      "type": "course-of-action",
+      "parent": "M1034",
+      "tactics": []
+    },
+    "M1017": {
+      "name": "User Training",
+      "type": "course-of-action",
+      "parent": "M1017",
+      "tactics": []
+    },
+    "M1052": {
+      "name": "User Account Control",
+      "type": "course-of-action",
+      "parent": "M1052",
+      "tactics": []
+    },
+    "M1028": {
+      "name": "Operating System Configuration",
+      "type": "course-of-action",
+      "parent": "M1028",
+      "tactics": []
+    },
+    "M1053": {
+      "name": "Data Backup",
+      "type": "course-of-action",
+      "parent": "M1053",
+      "tactics": []
+    },
+    "M1038": {
+      "name": "Execution Prevention",
+      "type": "course-of-action",
+      "parent": "M1038",
+      "tactics": []
+    },
+    "M1043": {
+      "name": "Credential Access Protection",
+      "type": "course-of-action",
+      "parent": "M1043",
+      "tactics": []
+    },
+    "M1045": {
+      "name": "Code Signing",
+      "type": "course-of-action",
+      "parent": "M1045",
+      "tactics": []
+    },
+    "M1039": {
+      "name": "Environment Variable Permissions",
+      "type": "course-of-action",
+      "parent": "M1039",
+      "tactics": []
+    },
+    "M1057": {
+      "name": "Data Loss Prevention",
+      "type": "course-of-action",
+      "parent": "M1057",
+      "tactics": []
+    },
+    "M1025": {
+      "name": "Privileged Process Integrity",
+      "type": "course-of-action",
+      "parent": "M1025",
+      "tactics": []
+    },
+    "M1055": {
+      "name": "Do Not Mitigate",
+      "type": "course-of-action",
+      "parent": "M1055",
+      "tactics": []
+    },
+    "M1056": {
+      "name": "Pre-compromise",
+      "type": "course-of-action",
+      "parent": "M1056",
+      "tactics": []
+    },
+    "M1020": {
+      "name": "SSL/TLS Inspection",
+      "type": "course-of-action",
+      "parent": "M1020",
+      "tactics": []
+    },
+    "M1046": {
+      "name": "Boot Integrity",
+      "type": "course-of-action",
+      "parent": "M1046",
+      "tactics": []
+    },
+    "M1060": {
+      "name": "Out-of-Band Communications Channel",
+      "type": "course-of-action",
+      "parent": "M1060",
+      "tactics": []
+    },
+    "M1030": {
+      "name": "Network Segmentation",
+      "type": "course-of-action",
+      "parent": "M1030",
+      "tactics": []
+    },
+    "M1019": {
+      "name": "Threat Intelligence Program",
+      "type": "course-of-action",
+      "parent": "M1019",
+      "tactics": []
+    },
+    "M1027": {
+      "name": "Password Policies",
+      "type": "course-of-action",
+      "parent": "M1027",
+      "tactics": []
+    },
+    "M1040": {
+      "name": "Behavior Prevention on Endpoint",
+      "type": "course-of-action",
+      "parent": "M1040",
+      "tactics": []
+    },
+    "M1018": {
+      "name": "User Account Management",
+      "type": "course-of-action",
+      "parent": "M1018",
+      "tactics": []
+    },
+    "M1022": {
+      "name": "Restrict File and Directory Permissions",
+      "type": "course-of-action",
+      "parent": "M1022",
+      "tactics": []
+    },
+    "M1026": {
+      "name": "Privileged Account Management",
+      "type": "course-of-action",
+      "parent": "M1026",
+      "tactics": []
+    },
+    "M1024": {
+      "name": "Restrict Registry Permissions",
+      "type": "course-of-action",
+      "parent": "M1024",
+      "tactics": []
+    },
+    "M1049": {
+      "name": "Antivirus/Antimalware",
+      "type": "course-of-action",
+      "parent": "M1049",
+      "tactics": []
+    },
+    "M1032": {
+      "name": "Multi-factor Authentication",
+      "type": "course-of-action",
+      "parent": "M1032",
+      "tactics": []
+    },
+    "M1054": {
+      "name": "Software Configuration",
+      "type": "course-of-action",
+      "parent": "M1054",
+      "tactics": []
+    },
+    "M1048": {
+      "name": "Application Isolation and Sandboxing",
+      "type": "course-of-action",
+      "parent": "M1048",
+      "tactics": []
+    },
+    "M1047": {
+      "name": "Audit",
+      "type": "course-of-action",
+      "parent": "M1047",
+      "tactics": []
+    },
+    "M1050": {
+      "name": "Exploit Protection",
+      "type": "course-of-action",
+      "parent": "M1050",
+      "tactics": []
+    },
+    "M1015": {
+      "name": "Active Directory Configuration",
+      "type": "course-of-action",
+      "parent": "M1015",
+      "tactics": []
+    },
+    "M1051": {
+      "name": "Update Software",
+      "type": "course-of-action",
+      "parent": "M1051",
+      "tactics": []
+    },
+    "M1044": {
+      "name": "Restrict Library Loading",
+      "type": "course-of-action",
+      "parent": "M1044",
+      "tactics": []
+    },
+    "M1042": {
+      "name": "Disable or Remove Feature or Program",
+      "type": "course-of-action",
+      "parent": "M1042",
+      "tactics": []
+    },
+    "M1036": {
+      "name": "Account Use Policies",
+      "type": "course-of-action",
+      "parent": "M1036",
+      "tactics": []
+    },
+    "M1041": {
+      "name": "Encrypt Sensitive Information",
+      "type": "course-of-action",
+      "parent": "M1041",
+      "tactics": []
+    }
+  },
+  "source_sha256": "72dd8869c26ed02183844707a0369e34a0377da85f3d68f52013106e2b156234",
+  "scope": "Frozen local 44-entry historical catalog, not a claim of latest ATT&CK release"
+}
