@@ -93,19 +93,32 @@ class Tests(unittest.TestCase):
         self.assertEqual(a3['numerator'],1);self.assertEqual(a4['value'],0)
     def test_all_actions_beyond_old_forty_limit_are_reviewed(self):
         folder,root,audit_dir,events=self.fixture(count=45);client=FakeReviewer(folder/'api')
-        a3,a4,detail=score(root,audit_dir,events,folder/'score',client)
+        a3,a4,detail=score(root,audit_dir,events,folder/'score',client,limit=None)
         self.assertEqual(a4['value'],1);self.assertEqual(a4['denominator'],45)
         self.assertEqual(detail['scope']['unselected_actions'],0);self.assertEqual(len(detail['actions']),45)
         self.assertEqual(client.calls,12)
-    def test_obsolete_action_cap_is_rejected(self):
+    def test_invalid_action_cap_is_rejected(self):
         folder,root,audit_dir,events=self.fixture()
-        with self.assertRaises(ValueError):score(root,audit_dir,events,folder/'score',FakeReviewer(folder/'api'),limit=1)
+        with self.assertRaises(ValueError):score(root,audit_dir,events,folder/'score',FakeReviewer(folder/'api'),limit=0)
+    def test_default_sample_denominator_is_not_entire_population(self):
+        folder,root,audit_dir,events=self.fixture(count=45);client=FakeReviewer(folder/'api')
+        _,a4,detail=score(root,audit_dir,events,folder/'score',client)
+        self.assertEqual(a4['denominator'],40);self.assertEqual(a4['value'],1)
+        self.assertEqual(detail['scope']['declared_actions'],45);self.assertEqual(detail['scope']['unselected_actions'],5)
+        self.assertEqual(client.calls,10)
+    def test_unverified_sample_stays_in_sample_denominator(self):
+        folder,root,audit_dir,events=self.fixture(count=4)
+        def remove_result(answer):
+            for row in answer['actions']:row['outcome']['state']='insufficient'
+        _,a4,detail=score(root,audit_dir,events,folder/'score',FakeReviewer(folder/'api',transform=remove_result),limit=2)
+        self.assertEqual(a4['denominator'],2);self.assertEqual(a4['value'],0)
+        self.assertEqual(detail['scope']['unselected_actions'],2)
     def test_action_after_old_limit_can_reduce_score(self):
         folder,root,audit_dir,events=self.fixture(count=45)
         def contradict(answer):
             for row in answer['actions']:
                 if row['action_id']=='a44':row['outcome']['state']='contradicted'
-        _,a4,detail=score(root,audit_dir,events,folder/'score',FakeReviewer(folder/'api',transform=contradict))
+        _,a4,detail=score(root,audit_dir,events,folder/'score',FakeReviewer(folder/'api',transform=contradict),limit=None)
         self.assertEqual(a4['numerator'],44);self.assertEqual(a4['denominator'],45)
         self.assertIn('a44',detail['scope']['unverified_outcome_action_ids'])
     def test_incomplete_defense_scan_has_no_outcome_ratio(self):

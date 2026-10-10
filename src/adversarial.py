@@ -113,7 +113,7 @@ def variants(hits,events):
  m=metric(len(supported)/n if n else None,'Confirmed distinct observed subtechnique implementations / observed parent techniques; within-subtechnique variation remains unassessed',upper=1.,numerator=len(supported),denominator=n)
  return m,{'parents':{p:dict(g) for p,g in groups.items()},'variant_parents':sorted(supported),'mechanism_policy':'observed distinct subtechniques only; conservative, no new variants from filenames/IPs/tools alone'}
 
-def defense_score(root,defense_dir,events,out=None,reviewer=None,limit=None):
+def defense_score(root,defense_dir,events,out=None,reviewer=None,limit=40):
  from defense_semantics import score
  if reviewer is None:
   class OfflineReviewer:
@@ -122,7 +122,7 @@ def defense_score(root,defense_dir,events,out=None,reviewer=None,limit=None):
  return score(Path(root),Path(defense_dir),events,Path(out) if out else Path(defense_dir).parent/'defense_semantics',reviewer,limit)
 
 
-def analyze(root,normalized,defense_dir,out,reviewer,defense_limit=None):
+def analyze(root,normalized,defense_dir,out,reviewer,defense_limit=40):
  root=Path(root).resolve();out.mkdir(parents=True,exist_ok=False);summary=read(normalized/'summary.json');hits=read(normalized/'05_rule_hits.json')
  wanted={h['evidence_id'] for h in hits if h['status']=='supported'};events=[]
  defense_items=list(lines(defense_dir/'evidence.jsonl.gz'));references=set()

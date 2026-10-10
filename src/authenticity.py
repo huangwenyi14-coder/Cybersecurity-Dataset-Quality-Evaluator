@@ -382,7 +382,7 @@ def render(output,profile,annotation,scores):
         if scores.get('self_reference'):text+='本数据与参考来源重叠，属于自参考描述，不能作为独立真实性验证。\n\n'
     else:text+='\n未提供可用的DARPA或其他真实参考，保留统计及待标定状态。测试参考产生的数字只验证函数。\n\n'
     detail=scores.get('annotation_detail',{})
-    text+=f"\nR01逐项核验：步骤 {detail.get('total_steps',0)} 个，记录范围 {detail.get('selected_records',0)} 条，已核验记录 {detail.get('reviewed_records',0)} 条。评分单位：{detail.get('unit','无')}；确认 {detail.get('supported',0)} / {detail.get('denominator',0)}。\n\n"
+    text+=f"\nR01分层抽查：步骤 {detail.get('total_steps',0)} 个，抽中记录 {detail.get('selected_records',0)} 条，已核验记录 {detail.get('reviewed_records',0)} 条。评分单位：{detail.get('unit','无')}；确认 {detail.get('supported',0)} / {detail.get('denominator',0)}。\n\n"
     text+=table(['记录统计','数量'],list(profile['counters'].items()))
     text+=f"\n输入全量完成：{profile['input_complete']}；分组 {len(profile['groups'])}；疑似断档 {profile['gap_candidates']}。\n\n"
     text+='时间分析保留有身份和可解释时间的待补全记录；行为分析仅用七字段完整记录。UTC 同主机同传感器可合并分片，相对时间默认按源文件隔离。观察起止之间的零事件窗口只表示未观测到事件，不证明采集中断。\n\n'

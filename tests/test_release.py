@@ -193,7 +193,7 @@ class Tests(unittest.TestCase):
         self.assertTrue({'mapping','gt','annotation','chain'}<=set(tasks))
         self.assertEqual(score['metrics']['R01']['score'],50)
         self.assertEqual(score['metrics']['R01']['coverage']['selected_records'],2)
-        self.assertEqual(score['protocol'],'fixed-evidence-v2-all-semantic')
+        self.assertEqual(score['protocol'],'fixed-evidence-v3-step-sampling')
         self.assertEqual(score['metrics']['A03']['score'],0)
         self.assertTrue(all(isinstance(m['score'],(int,float)) for m in score['metrics'].values()))
         for artifact in read(out/'artifact_manifest.json')['artifacts']:

@@ -16,7 +16,7 @@ class Tests(unittest.TestCase):
      'time_features':{k:0 for k in time},'behavior_proportions':{'process|read|file':1}}
   p={'input_complete':complete,'groups':[g],'counters':{'input_records':10},'source_file_sha256':['target']}
   ann={'label_counts':{'benign':10},'assigned_label_records':10,'event_level_traceable_labels':10}
-  ann['semantic_review']={'protocol':'annotation-semantics-v2-all-steps','status':'semantic_all_reviewed','population_by_label':{'benign':10},'selected_records':10,
+  ann['semantic_review']={'protocol':'annotation-semantics-v3-step-sampling','status':'semantic_all_reviewed','population_by_label':{'benign':10},'selected_records':10,
                           'rows':[{'record_id':str(i),'label':'benign','valid_review':True,'final_state':'supported'} for i in range(10)]}
   return p,ref,ann
  def test_total_all_three_indicators(self):

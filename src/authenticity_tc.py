@@ -106,7 +106,7 @@ def score(profile,reference,annotation):
          'score_interpretation':'Self-reference descriptive score only, not independent validation.' if overlap else reference['comparison_scope'],
          'coverage':{'time_records':time_n,'behavior_records':behavior_n,'all_records':n,'time_fraction':time_n/n if n else 0,'behavior_fraction':behavior_n/n if n else 0},
          'scope':'Scores conditional on normalized records eligible for each feature. Mapping failures remain visible in coverage; no second completeness penalty.',
-         'total_reason':'20% exhaustive step/annotation semantic support +40% time +40% behavior. Fixed engineering protocol, not an empirically validated universal authenticity probability.'}
+         'total_reason':'20% per-step sampled annotation semantic support +40% time +40% behavior. Fixed engineering protocol, not an empirically validated universal authenticity probability.'}
 
 
 def rescore(analysis,reference_path,output):

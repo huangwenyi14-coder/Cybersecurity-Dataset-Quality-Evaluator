@@ -44,7 +44,7 @@ def compose(completeness, authenticity, adversarial):
     for dim,weight in DIMENSION_WEIGHTS.items():
         score = sum(m['score']*m['weight_within_dimension'] for m in metrics.values() if m['dimension']==dim)
         dimensions[dim] = {'name':DIMENSION_NAMES[dim], 'score':score, 'weight':weight, 'contribution':score*weight}
-    return {'system':SYSTEM_NAME,'version':VERSION,'protocol':'fixed-evidence-v2-all-semantic',
+    return {'system':SYSTEM_NAME,'version':VERSION,'protocol':'fixed-evidence-v3-step-sampling',
             'input_complete':full,'total_score':sum(d['contribution'] for d in dimensions.values()) if full else None,
             'dimensions':dimensions,'metrics':metrics,'review_required':review,
             'status':'input_incomplete' if not full else 'scored_with_evidence_gaps' if review else 'scored',
@@ -66,7 +66,9 @@ def write(out,c,a,d,authout,advout):
     text+='\n'+table(['一级','二级','编号','指标','得分/100','计算方法','证据状态'],[[DIMENSION_NAMES[m['dimension']],m['group'],k,m['name'],f"{m['score']:.2f}",m['formula'],m['status']] for k,m in result['metrics'].items()])
     text+='\n'+table(['输入检查','值'],[['原始事件数',summary['counts'].get('records',0)],['七字段完整事件数',summary['counts'].get('valid_records',0)],['不完整事件数',summary['counts'].get('incomplete_records',0)],['完整扫描',summary['complete_input_scan']],['未适配文件数',len(summary['unsupported_files'])],['解析/标签错误数',len(summary['errors'])],['AI请求记录数',len(usage['calls'])],['API返回token计数（含缓存来源，详见usage）',usage['usage'].get('total_tokens',0)]])
     ann=result['metrics']['R01'].get('coverage',{})
-    text+=f"\nR01逐项核验：全部步骤 {ann.get('total_steps',0)} 个，关联记录已核验的步骤 {ann.get('reviewed_steps',0)} 个；记录范围 {ann.get('selected_records',0)} 条，具有合法判断 {ann.get('reviewed_records',0)} 条。无步骤时按全部已有标签记录评分。未核验项保留在分母，模型判断不等于人工真值。\n"
+    text+=f"\nR01分层抽查：全部步骤 {ann.get('total_steps',0)} 个，样本已核验的步骤 {ann.get('reviewed_steps',0)} 个；候选记录 {ann.get('sampling',{}).get('candidate_records',0)} 条，抽中 {ann.get('selected_records',0)} 条，具有合法判断 {ann.get('reviewed_records',0)} 条。无步骤时按标签样本评分。抽中但未核验项保留在样本分母，不代表全量标注正确率。\n"
+    defense_scope=result['metrics']['A04'].get('scope',{})
+    text+=f"\nA04防御动作抽查：总体 {defense_scope.get('declared_actions',0)} 个，抽中 {defense_scope.get('selected_actions',0)} 个；按抽中样本评分，未抽中不当作错误。\n"
     text+='\n真实性为相对于冻结参考的统计相似度，须结合参与覆盖率；A01不代表完整攻击链重建；A02仅统计已识别子技术变种；A03按44项ATT&CK缓解措施参考目录归类；A04要求执行与结果的语义对应。未核验动作不计确认分。\n\n'
     for mid in result['review_required']:
         text+=f'- {mid}：{result["metrics"][mid]["reason"]}\n'

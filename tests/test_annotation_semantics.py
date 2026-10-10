@@ -1,7 +1,7 @@
 from core import *
 import unittest, copy
 from ingest import run as ingest
-from annotation_semantics import prepare, validate, review, summarize, all_records, PROTOCOL
+from annotation_semantics import prepare, validate, review, summarize, all_records, select_records, PROTOCOL
 
 
 def verdict(task, state='supported'):
@@ -102,6 +102,31 @@ class Tests(unittest.TestCase):
         second,_=all_records(norm)
         self.assertEqual([x['event_id'] for x in first],[x['event_id'] for x in second])
         self.assertEqual(len(first),28);self.assertEqual(counts,{'benign':25,'malicious':3})
+    def test_sampling_is_bounded_per_step_and_unlinked_label(self):
+        folder,root,norm=self.fixture(['benign']*25+['malicious']*35)
+        selected,counts,scope=select_records(norm)
+        self.assertEqual(len(selected),20);self.assertEqual(scope['population_by_step']['s1'],35)
+        self.assertEqual(scope['sampled_by_step']['s1'],10);self.assertEqual(scope['sampled_unlinked_by_label']['benign'],10)
+        path=norm/'03_events.valid.jsonl.gz';events=list(lines(path))
+        with gzip.open(path,'wb') as stream:
+            for e in reversed(events):emit(stream,e)
+        again,_,_=select_records(norm)
+        self.assertEqual([e['event_id'] for e in selected],[e['event_id'] for e in again])
+        client=FakeReviewer(folder/'api');result=review(root,norm,folder/'review',client)
+        self.assertEqual(result['summary']['score'],100);self.assertEqual(result['summary']['selected_records'],20)
+        self.assertEqual(result['steps'][0]['population_records'],35)
+        self.assertEqual(client.calls,5);self.assertTrue((folder/'review/plan.json').exists())
+    def test_selected_but_invalid_records_remain_in_denominator(self):
+        folder,root,norm=self.fixture(['malicious']*20)
+        selected,_,_=select_records(norm);bad=selected[0]['event_id']
+        path=norm/'03_events.valid.jsonl.gz';events=list(lines(path))
+        for e in events:
+            if e['event_id']==bad:e['validation']['valid']=False
+        with gzip.open(path,'wb') as stream:
+            for e in events:emit(stream,e)
+        result=review(root,norm,folder/'review',FakeReviewer(folder/'api'))
+        self.assertEqual(result['steps'][0]['linked_records'],10)
+        self.assertEqual(result['steps'][0]['supported_records'],9);self.assertEqual(result['summary']['score'],0)
     def test_changed_source_fails_before_model(self):
         folder,root,norm=self.fixture()
         with (root/'events.jsonl').open('ab') as f:f.write(b'\n')
@@ -141,12 +166,12 @@ class Tests(unittest.TestCase):
         self.assertAlmostEqual(result['summary']['score'],1200/13)
         self.assertEqual(client.calls,3)
         self.assertEqual(next(s for s in result['steps'] if s['step_id']=='s12')['state'],'insufficient')
-    def test_all_labels_without_gt_are_checked(self):
+    def test_labels_without_gt_are_sampled(self):
         folder,root,_=self.fixture(['benign']*25)
         save(root/'ground_truth.json',{'scenario_name':'attack','storyline_steps':[]})
         norm=folder/'all_labels';ingest(root,norm,{})
         client=FakeReviewer(folder/'api');result=review(root,norm,folder/'review',client)
-        self.assertEqual(result['summary']['selected_records'],25);self.assertEqual(client.calls,7)
+        self.assertEqual(result['summary']['selected_records'],10);self.assertEqual(client.calls,3)
         self.assertEqual(result['summary']['score'],100);self.assertEqual(result['summary']['unit'],'labeled_record')
     def test_missing_event_label_does_not_skip_declared_step(self):
         folder,root,_=self.fixture(['unknown'])
@@ -154,9 +179,9 @@ class Tests(unittest.TestCase):
         norm=folder/'step_only';ingest(root,norm,{})
         client=FakeReviewer(folder/'api');result=review(root,norm,folder/'review',client)
         self.assertEqual(client.calls,1);self.assertEqual(result['summary']['score'],100)
-    def test_obsolete_sampling_config_is_rejected(self):
+    def test_invalid_sampling_config_is_rejected(self):
         folder,root,norm=self.fixture()
-        with self.assertRaises(ValueError):review(root,norm,folder/'review',FakeReviewer(folder/'api'),limit=10)
+        with self.assertRaises(ValueError):review(root,norm,folder/'review',FakeReviewer(folder/'api'),limit=0)
     def test_record_linked_to_many_steps_is_split_without_omissions(self):
         folder,root,_=self.fixture(['malicious'])
         save(root/'ground_truth.json',{'scenario_name':'attack','storyline_steps':[
@@ -176,7 +201,7 @@ class Tests(unittest.TestCase):
                 if row['record_id']==last:
                     for check in row['step_checks']:check['state']='contradicted'
         selected,_=all_records(norm);last=selected[-1]['event_id']
-        client=FakeReviewer(folder/'api',contradict_one);result=review(root,norm,folder/'review',client)
+        client=FakeReviewer(folder/'api',contradict_one);result=review(root,norm,folder/'review',client,limit=15)
         self.assertEqual(len(result['rows']),15);self.assertEqual(result['steps'][0]['supported_records'],14)
         self.assertEqual(result['summary']['score'],0);self.assertEqual(client.calls,4)
     def test_reply_missing_target_rejects_batch_with_trace(self):

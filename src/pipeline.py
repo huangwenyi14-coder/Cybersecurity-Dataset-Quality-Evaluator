@@ -40,8 +40,12 @@ def finalize(out,ai_gt):
  (out/'report.md').write_text(text,encoding='utf-8');return result
 
 def execute(root,out,config=None,offline=False,max_records=None,plan_only=False,resume=False,refresh_gt=False,authenticity_config=None,authenticity_reference=None):
- for key in ('annotation_samples_per_label','defense_semantic_action_limit'):
-  if (authenticity_config or {}).get(key) is not None:raise ValueError('Full semantic review requires removing obsolete limit: '+key)
+ settings=authenticity_config or {}
+ for key,default in (('annotation_samples_per_step',10),('annotation_samples_per_label',10),('defense_semantic_action_limit',40)):
+  value=settings.get(key,default)
+  if key=='defense_semantic_action_limit' and value is None:continue
+  maximum=1000 if key=='defense_semantic_action_limit' else 100
+  if isinstance(value,bool) or not isinstance(value,int) or not 1<=value<=maximum:raise ValueError('Invalid semantic sample setting: '+key)
  root=Path(root).resolve();out=Path(out).resolve()
  if resume:
   if out.is_relative_to(root) or root.is_relative_to(out):raise ValueError('Unsafe resume paths')
@@ -98,7 +102,8 @@ def execute(root,out,config=None,offline=False,max_records=None,plan_only=False,
  state.update(stage='annotation_semantic_review');save(out/'workflow.json',state)
  annotation_out=out/'annotation_semantics'
  if annotation_out.exists():annotation_out=out/('annotation_semantics_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
- annotation_review=review_annotation(source,normalized,annotation_out,reviewer,complete=summary['complete_input_scan'])
+ annotation_review=review_annotation(source,normalized,annotation_out,reviewer,limit=settings.get('annotation_samples_per_step',10),
+     per_label=settings.get('annotation_samples_per_label',10),complete=summary['complete_input_scan'])
  from authenticity import analyze as analyze_authenticity
  state.update(stage='authenticity_time_and_behavior');save(out/'workflow.json',state)
  authout=out/'authenticity'
@@ -113,7 +118,7 @@ def execute(root,out,config=None,offline=False,max_records=None,plan_only=False,
  state.update(stage='adversarial');save(out/'workflow.json',state)
  advout=out/'adversarial'
  if advout.exists():advout=out/('adversarial_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
- adversarial=analyze_adversarial(source,normalized,defense_dir,advout,reviewer)
+ adversarial=analyze_adversarial(source,normalized,defense_dir,advout,reviewer,settings.get('defense_semantic_action_limit',40))
  result['adversarial']={'report':str(advout/'report.md'),'score':adversarial['score'],'evidence_score':adversarial['evidence_score'],'unknown_metrics':adversarial['unknown_metrics']}
  (out/'completeness_report.md').write_bytes((out/'report.md').read_bytes())
  from quality_summary import write as write_quality
